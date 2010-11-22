@@ -179,7 +179,7 @@ class TestKey(unittest.TestCase):
         # key property is absent before first call
         self.assertFalse('key' in key.__dict__)
 
-        # we can't just check equity as Version may vary
+        # we can't just check equality as Version may vary
         self.assertIn(stored_key, key.key)
         self.assertTrue(key.key.startswith(key._begin_header))
         self.assertTrue(key.key.endswith(key._end_header))
