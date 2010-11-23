@@ -33,6 +33,8 @@ class TestKeyServer(unittest.TestCase):
         """
         self.server_host = choice(KEY_SERVERS)
         self.serv = KeyServer(self.server_host)
+        self.begin_header = '-----BEGIN PGP PUBLIC KEY BLOCK-----'
+        self.end_header = '-----END PGP PUBLIC KEY BLOCK-----'
 
     def test_init(self):
         """
@@ -59,6 +61,21 @@ class TestKeyServer(unittest.TestCase):
         self.assertEqual(len(result), 1)
         result[0].keyid = KEYID
         result[0].identities[0].uid = UID
+
+    def test_add(self):
+        """
+        Test ASCII armored key upload
+        """
+        stored_key = os.path.join(
+            os.path.abspath(os.path.dirname(__file__)),
+            'ubuntu.key',
+        )
+        key = open(stored_key, 'r').read()
+        self.serv.add('%s\n\n%s\n%s' % (
+            self.begin_header,
+            key,
+            self.end_header,
+        ))
 
 
 class TestIdentity(unittest.TestCase):

@@ -176,3 +176,11 @@ class KeyServer(object):
         request_url = '%s:%d/pks/lookup?%s' % (self.host, self.port, params)
         response = urllib2.urlopen(request_url).read()
         return self.__parse_index(response)
+
+    def add(self, key):
+        """
+        Upload key to the keyserver.
+        """
+        request_url = '%s:%d/pks/add' % (self.host, self.port)
+        params = urllib.urlencode({'keytext': key})
+        urllib2.urlopen(request_url, params)
