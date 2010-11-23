@@ -1,3 +1,7 @@
+"""
+Test suite for hkp Python module.
+"""
+
 import datetime
 import time
 import os
@@ -138,6 +142,8 @@ class TestKey(unittest.TestCase):
             os.path.abspath(os.path.dirname(__file__)),
             'ubuntu.key',
         )
+        self.begin_header = '-----BEGIN PGP PUBLIC KEY BLOCK-----'
+        self.end_header = '-----END PGP PUBLIC KEY BLOCK-----'
 
     def test_init(self):
         """
@@ -198,8 +204,8 @@ class TestKey(unittest.TestCase):
 
         # we can't just check equality as Version may vary
         self.assertIn(stored_key, key.key)
-        self.assertTrue(key.key.startswith(key._begin_header))
-        self.assertTrue(key.key.endswith(key._end_header))
+        self.assertTrue(key.key.startswith(self.begin_header))
+        self.assertTrue(key.key.endswith(self.end_header))
 
         # key property is there, lazy property works!
         self.assertTrue('key' in key.__dict__)

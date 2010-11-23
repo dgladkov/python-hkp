@@ -147,8 +147,8 @@ class KeyServer(object):
             """
             iterator = iter(lines)
 
-            for l in iterator:
-                items = l.split(':')
+            for line in iterator:
+                items = line.split(':')
                 if items[0] == 'pub':
                     key = Key(self.host, self.port, *items[1:])
                     yield key
