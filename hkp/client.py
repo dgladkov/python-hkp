@@ -140,23 +140,18 @@ class KeyServer(object):
         """
         Parse machine readable index response.
         """
-
-        def parse(lines, key=None):
-            """
-            Internal recursive parse generator.
-            """
-            iterator = iter(lines)
-
-            for line in iterator:
-                items = line.split(':')
-                if items[0] == 'pub':
-                    key = Key(self.host, self.port, *items[1:])
-                    yield key
-                if items[0] == 'uid' and key:
-                    key.identities.append(Identity(*items[1:]))
-
         lines = response.splitlines()[1:]
-        return [key for key in parse(lines)]
+        result, key = [], None
+
+        for line in iter(lines):
+            items = line.split(':')
+            if items[0] == 'pub':
+                key = Key(self.host, self.port, *items[1:])
+                result.append(key)
+            if items[0] == 'uid' and key:
+                key.identities.append(Identity(*items[1:]))
+
+        return result
 
     def search(self, query, exact=False, nm=False):
         """
