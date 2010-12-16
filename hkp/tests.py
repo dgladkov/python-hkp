@@ -203,7 +203,7 @@ class TestKey(unittest.TestCase):
         self.assertFalse('key' in key.__dict__)
 
         # we can't just check equality as Version may vary
-        self.assertIn(stored_key, key.key)
+        self.assertTrue(stored_key in key.key)
         self.assertTrue(key.key.startswith(self.begin_header))
         self.assertTrue(key.key.endswith(self.end_header))
 
