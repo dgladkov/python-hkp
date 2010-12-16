@@ -1,6 +1,6 @@
 """
 Python HKP procol client implementation based on the
-`current draft spec <http://werkzeug.pocoo.org/>`_.
+`current draft spec <http://tools.ietf.org/html/draft-shaw-openpgp-hkp-00>`_.
 """
 
 try:
