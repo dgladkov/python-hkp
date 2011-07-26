@@ -24,6 +24,7 @@ PORT = 11371
 FINGERPRINT = '0x46181433FBB75451'
 KEYID = '0x%s' % FINGERPRINT[-8:]
 UID = 'Ubuntu CD Image Automatic Signing Key'
+FULL_UID = UID + ' <cdimage@ubuntu.com>'
 DINGUS = Dingus()
 
 
@@ -69,11 +70,11 @@ class TestKeyServer(unittest.TestCase):
         """
         result = self.serv.search(KEYID)
         search_url = (self.server_host + ':11371/pks/lookup'
-                '?search=0xFBB75451&exact=off&options=mr&op=index')
+                '?search=' + KEYID + '&exact=off&options=mr&op=index')
         self.assertTrue(DINGUS.calls('()', search_url).once())
         self.assertEqual(len(result), 1)
-        result[0].keyid = KEYID
-        result[0].identities[0].uid = UID
+        self.assertEqual(result[0].keyid, KEYID[2:])
+        self.assertEqual(result[0].identities[0].uid, FULL_UID)
 
     @patch('urllib2.urlopen', DINGUS)
     def test_search_by_fingerprint(self):
@@ -82,11 +83,11 @@ class TestKeyServer(unittest.TestCase):
         """
         result = self.serv.search(FINGERPRINT)
         search_url = (self.server_host + ':11371/pks/lookup'
-                '?search=0x46181433FBB75451&exact=off&options=mr&op=index')
+                '?search=' + FINGERPRINT + '&exact=off&options=mr&op=index')
         self.assertTrue(DINGUS.calls('()', search_url).once())
         self.assertEqual(len(result), 1)
-        result[0].keyid = KEYID
-        result[0].identities[0].uid = UID
+        self.assertEqual(result[0].keyid, KEYID[2:])
+        self.assertEqual(result[0].identities[0].uid, FULL_UID)
 
     @patch('urllib2.urlopen', DINGUS)
     def test_search_by_uid(self):
@@ -95,12 +96,12 @@ class TestKeyServer(unittest.TestCase):
         """
         result = self.serv.search(UID)
         search_url = (self.server_host + ':11371/pks/lookup'
-                '?search=Ubuntu+CD+Image+Automatic+Signing+Key'
+                '?search=' + UID.replace(' ', '+') +
                 '&exact=off&options=mr&op=index')
         self.assertTrue(DINGUS.calls('()', search_url).once())
         self.assertEqual(len(result), 1)
-        result[0].keyid = KEYID
-        result[0].identities[0].uid = UID
+        self.assertEqual(result[0].keyid, KEYID[2:])
+        self.assertEqual(result[0].identities[0].uid, FULL_UID)
 
     @patch('urllib2.urlopen', DINGUS)
     def test_add(self):
