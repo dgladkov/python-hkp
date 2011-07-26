@@ -28,5 +28,7 @@ setup(
         'Topic :: Software Development :: Libraries :: Python Modules'
     ],
     packages=['hkp'],
-    platforms='any'
+    platforms='any',
+    test_suite = "hkp.tests",
+    tests_require=["dingus==0.3.2"],
 )
