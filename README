@@ -1,5 +1,9 @@
 Python HPK client.
 
+Installing:
+
+# pip install python-hkp
+
 Usage example:
 
 >>> from hkp import KeyServer
